@@ -37,7 +37,7 @@ const Users = ({ loading, users }: { loading: boolean; users: UserType[] }) => {
 };
 const userStyle = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(3,1fr)',
+  gridTemplateColumns: 'repeat(3,minmax(0,1fr))',
   gridGap: '1rem'
 };
 
