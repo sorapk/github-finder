@@ -1,14 +1,15 @@
 import './App.css';
 import Navbar from './components/layout/Navbar';
-import Users from './users/Users';
+import Users from './components/users/Users';
 import React, { Component } from 'react';
+import Search from './components/users/Search';
 
 export default class App extends Component {
   state = {
     users: [],
     loading: false
   };
-  async componentDidMount() {
+  fetch = async (url: string) => {
     this.setState({ loading: true });
 
     const header = new Headers();
@@ -17,30 +18,35 @@ export default class App extends Component {
       'Authorization',
       `Basic ${process.env.REACT_APP_GITHUB_CLIENT_ID}:${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
     );
-    const request = new Request('https://api.github.com/users', {
+    const request = new Request(url, {
       method: 'GET',
       headers: header
     });
 
-    try {
-      const response = await fetch(request);
-      let jsondata;
-      if (response.ok) {
-        jsondata = await response.json();
-        this.setState({ loading: false, users: jsondata });
-      } else {
-        throw new Error('Response not ok');
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    const response = await fetch(request);
+    const jsondata = await response.json();
+
     this.setState({ loading: false });
+
+    return jsondata;
+  };
+  searchUser = async (user: string) => {
+    const jsondata = await this.fetch(
+      `https://api.github.com/search/users?q=${user}`
+    );
+
+    this.setState({ users: jsondata.items });
+  };
+  async componentDidMount() {
+    const jsondata = await this.fetch('https://api.github.com/users');
+    this.setState({ users: jsondata });
   }
   render() {
     return (
       <div className='App'>
         <Navbar />
         <div className='container'>
+          <Search searchUser={this.searchUser} />
           <Users loading={this.state.loading} users={this.state.users} />
         </div>
       </div>

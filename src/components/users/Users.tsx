@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import UserItem from './UserItem';
-import { Spinner } from '../components/layout/Spinner';
+import { Spinner } from '../layout/Spinner';
 
 interface UserType {
   login: string;
