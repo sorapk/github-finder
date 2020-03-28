@@ -4,7 +4,7 @@ Interfaces with Github API and performs user lookup on Github.
 
 ## High Level Component
 
-![Overlay](https://github.com/sorapk/github-finder/blob/master/high-level-component.PNG)
+![Overlay](https://github.com/sorapk/github-finder/blob/master/other/high-level-component.PNG)
 
 ## Technology
 
