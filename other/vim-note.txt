@@ -1,0 +1,9 @@
+Vim notes:
+
+ciw - change insert word
+ci) - change insert until )
+ci/<word> - change insert until some word
+f<char> - find/move cursor to word
+u   - undo
+dw  - delete word
+.   - repeat last acton
