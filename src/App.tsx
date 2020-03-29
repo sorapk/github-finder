@@ -15,6 +15,7 @@ interface AppState {
   loading: boolean;
   alert: AlertType;
   user: {} | null;
+  repos: any[];
 }
 
 export default class App extends Component<any, AppState> {
@@ -22,7 +23,8 @@ export default class App extends Component<any, AppState> {
     users: [],
     loading: false,
     alert: null,
-    user: null
+    user: null,
+    repos: []
   };
   fetch = async (url: string) => {
     this.setState({ loading: true });
@@ -56,7 +58,7 @@ export default class App extends Component<any, AppState> {
       response.headers.forEach((val, key) => console.log(val, key));
 
       this.setAlert(
-        `Request Limit: ${xrem}/${xlimit} ....  Reset Time: ${resetDate}`,
+        `Request Limit: ${xrem} (${xlimit}) ....  Reset Time: ${resetDate}`,
         'warning',
         3000
       );
@@ -79,6 +81,12 @@ export default class App extends Component<any, AppState> {
     const jsondata = await this.fetch(`${API_BASE_URL}/users/${login}`);
     this.setState({ user: jsondata });
   };
+  getUserRepos = async (login: string) => {
+    const jsondata = await this.fetch(
+      `${API_BASE_URL}/users/${login}/repos?per_page=5&sort=created:asc`
+    );
+    this.setState({ repos: jsondata });
+  };
   clearUsers = () => {
     this.setState({ users: [] });
   };
@@ -94,7 +102,7 @@ export default class App extends Component<any, AppState> {
     this.setState({ users: typeof jsondata === typeof [] ? jsondata : [] });
   }
   render() {
-    const { users, loading, user } = this.state;
+    const { users, loading, user, repos } = this.state;
     return (
       <BrowserRouter>
         <div className='App'>
@@ -126,7 +134,9 @@ export default class App extends Component<any, AppState> {
                   <User
                     {...props}
                     getUser={this.getUser}
+                    getUserRepos={this.getUserRepos}
                     user={user}
+                    repos={repos}
                     loading={loading}
                   />
                 )}

@@ -2,19 +2,23 @@ import React, { Component, Fragment } from 'react';
 import { UserType } from './Users';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { Spinner } from '../layout/Spinner';
+import Repos from '../repos/Repos';
 
 interface UserProp extends RouteComponentProps<{ login: string }> {
   getUser: (login: string) => void;
   user: UserType | null;
   loading: boolean;
+  getUserRepos: (login: string) => void;
+  repos: any[];
 }
 
 class User extends Component<UserProp, any> {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
+    this.props.getUserRepos(this.props.match.params.login);
   }
   render() {
-    const { user, loading } = this.props;
+    const { user, loading, repos } = this.props;
 
     if (user !== null) {
       const {
@@ -100,6 +104,7 @@ class User extends Component<UserProp, any> {
             </div>
             <div className='badge badge-dark'>Gists: {[public_gists]}</div>
           </div>
+          <Repos repos={repos} />
         </Fragment>
       );
     }
