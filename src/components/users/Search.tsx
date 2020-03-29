@@ -32,6 +32,7 @@ class Search extends Component<SearchProp, {}> {
             type='text'
             name='text'
             placeholder='Search Users...'
+            value={this.state.text}
             onChange={this.onChange}
           ></input>
           <input

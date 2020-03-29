@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import UserItem from './UserItem';
 import { Spinner } from '../layout/Spinner';
 
-interface UserType {
+export interface UserType {
   login: string;
   id: number;
   node_id: string;
@@ -21,6 +21,19 @@ interface UserType {
   received_events_url: string;
   type: string;
   site_admin: boolean;
+  blog: string;
+  location: string;
+  email: string | null;
+  hireable: boolean;
+  bio: string;
+  public_repos: number;
+  public_gists: number;
+  followers: number;
+  following: number;
+  created_at: string;
+  updated_at: string;
+  company: string;
+  name: string;
 }
 const Users = ({ loading, users }: { loading: boolean; users: UserType[] }) => {
   if (loading) {

@@ -29,3 +29,7 @@ Interfaces with Github API and performs user lookup on Github.
 
 - Reassign cache path to fix windows npm error "npm config set cache C:\tmp\nodejs\npm-cache --global"
 - https://github.com/zkat/npx/issues/146
+
+## TODO:
+
+- Implement OAuth on backend
