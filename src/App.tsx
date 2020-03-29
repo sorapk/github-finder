@@ -7,7 +7,8 @@ import Search from './components/users/Search';
 import Alert, { AlertType } from './components/layout/Alert';
 import { About } from './components/pages/About';
 import User from './components/users/User';
-import Callback from './components/users/Callback';
+
+const API_BASE_URL = 'https://api.github.com';
 
 interface AppState {
   users: any[];
@@ -15,8 +16,6 @@ interface AppState {
   alert: AlertType;
   user: {} | null;
 }
-
-const API_BASE_URL = 'https://api.github.com';
 
 export default class App extends Component<any, AppState> {
   state = {
