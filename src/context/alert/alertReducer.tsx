@@ -17,10 +17,10 @@ export const alertReducer = (
 
   switch (type) {
     case eAlertActionTypes.SET_ALERT:
-      nextState = { alert: payload as AlertType };
+      nextState = { ...state, alert: payload as AlertType };
       break;
     case eAlertActionTypes.REMOVE_ALERT:
-      nextState = { alert: null };
+      nextState = { ...state, alert: null };
       break;
     default:
       break;

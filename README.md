@@ -6,10 +6,12 @@ Interfaces with Github API and performs user lookup on Github.
 
 ![Overlay](https://github.com/sorapk/github-finder/blob/master/other/high-level-component.PNG)
 
-## Technology
+## Technology / Pattern
 
 - React
 - Type Script
+- React Hooks
+- Context / Reducer Pattern
 
 ## Environment Setup
 
