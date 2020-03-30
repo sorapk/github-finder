@@ -1,5 +1,4 @@
-import React, { Component, Fragment, useEffect, useContext } from 'react';
-import { UserType } from './Users';
+import React, { Fragment, useEffect, useContext } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { Spinner } from '../layout/Spinner';
 import Repos from '../repos/Repos';
@@ -14,12 +13,12 @@ const User = (props: RouteComponentProps<{ login: string }>) => {
       console.log('effecting');
       githubContext.getUser(props.match.params.login);
       githubContext.getUserRepos(props.match.params.login);
-      // eslint-disable-next-line
 
       return () => {
         // cleanup
       };
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       /*dependencies*/
     ]

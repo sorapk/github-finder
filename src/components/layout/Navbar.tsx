@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 const Navbar = () => {
-  const redirect_uri = 'http://localhost:3000/callback';
   return (
     <nav className='navbar bg-primary blue'>
       <h1>
-        <i className='fab fa-github'></i> Github Finder
+        <i className='fab fa-github'></i> <Link to='/'>Github Finder</Link>
       </h1>
       <ul>
         <li>

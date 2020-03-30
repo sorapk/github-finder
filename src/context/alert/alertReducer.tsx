@@ -1,4 +1,3 @@
-import React from 'react';
 import { AlertType } from '../../components/layout/Alert';
 import { eAlertActionTypes } from '../types';
 import { AlertContextState } from './alertContext';
