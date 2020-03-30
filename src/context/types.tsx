@@ -1,11 +1,17 @@
 // Action
 
-export enum eActionTypes {
+export enum eGithubActionTypes {
   SEARCH_USER = 'SEARCH_USER',
   GET_USER = 'GET_USER',
   CLEAR_USERS = 'CLEAR_USERS',
   GET_REPOS = 'GET_REPOS',
   SET_LOADING = 'SET_LOADING',
+  SET_ALERT = 'SET_ALERT',
+  REMOVE_ALERT = 'REMOVE_ALERT',
+  SET_API_LOG = 'SET_API_LOG'
+}
+
+export enum eAlertActionTypes {
   SET_ALERT = 'SET_ALERT',
   REMOVE_ALERT = 'REMOVE_ALERT'
 }

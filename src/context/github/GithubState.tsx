@@ -1,5 +1,5 @@
 import React, { useReducer, Reducer } from 'react';
-import { eActionTypes } from '../types';
+import { eGithubActionTypes } from '../types';
 import GithubContext, {
   GithubContextState,
   InitGithubContextState
@@ -12,6 +12,7 @@ const GithubState = (props: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer<
     Reducer<GithubContextState, GithubReducerAction>
   >(githubReducer, InitGithubContextState);
+  console.log('github state update', state);
 
   // Data Fetcher
   const custFetch = async (url: string) => {
@@ -45,15 +46,12 @@ const GithubState = (props: { children: React.ReactNode }) => {
 
       response.headers.forEach((val, key) => console.log(val, key));
 
-      // setAlert(
-      //   `Request Limit: ${xrem} (${xlimit}) ....  Reset Time: ${resetDate}`,
-      //   'warning',
-      //   3000
-      // );
-
-      // if ('message' in jsondata) {
-      //   setAlert(jsondata.message, 'warning');
-      // }
+      setAPILog(
+        `Request Limit: ${xrem} (${xlimit}) ....  Reset Time: ${resetDate}`
+      );
+      if ('message' in jsondata) {
+        setAPILog(jsondata.message);
+      }
     } catch (e) {
       throw new Error('Bad Fetch');
     } finally {
@@ -69,7 +67,7 @@ const GithubState = (props: { children: React.ReactNode }) => {
       // Default Search
       jsondata = await custFetch(`${API_BASE_URL}/users`);
       dispatch({
-        type: eActionTypes.SEARCH_USER,
+        type: eGithubActionTypes.SEARCH_USER,
         payload: jsondata
       });
     } else {
@@ -78,7 +76,7 @@ const GithubState = (props: { children: React.ReactNode }) => {
         `${API_BASE_URL}/search/users?q=${user}`
       );
       dispatch({
-        type: eActionTypes.SEARCH_USER,
+        type: eGithubActionTypes.SEARCH_USER,
         payload: jsondata.items
       });
     }
@@ -88,7 +86,7 @@ const GithubState = (props: { children: React.ReactNode }) => {
     const jsondata = await custFetch(`${API_BASE_URL}/users/${login}`);
 
     dispatch({
-      type: eActionTypes.GET_USER,
+      type: eGithubActionTypes.GET_USER,
       payload: jsondata
     });
   };
@@ -98,31 +96,41 @@ const GithubState = (props: { children: React.ReactNode }) => {
       `${API_BASE_URL}/users/${login}/repos?per_page=5&sort=created:asc`
     );
     dispatch({
-      type: eActionTypes.GET_REPOS,
+      type: eGithubActionTypes.GET_REPOS,
       payload: jsondata
     });
   };
   // Clear Users
   const clearUsers = () => {
     dispatch({
-      type: eActionTypes.CLEAR_USERS
+      type: eGithubActionTypes.CLEAR_USERS
     });
   };
   // Set Loading
   const setLoading = () => {
     dispatch({
-      type: eActionTypes.SET_LOADING
+      type: eGithubActionTypes.SET_LOADING
     });
   };
-
+  // Set API Log
+  const setAPILog = (log: string) => {
+    dispatch({
+      type: eGithubActionTypes.SET_API_LOG,
+      payload: log
+    });
+  };
+  const clearApiLog = () => {
+    dispatch({
+      type: eGithubActionTypes.SET_API_LOG,
+      payload: ''
+    });
+  };
   //Return Provider
   return (
     <GithubContext.Provider
       value={{
-        userList: state.userList,
-        user: state.user,
-        repos: state.repos,
-        loading: state.loading,
+        ...state,
+        clearApiLog: clearApiLog,
         searchUsers: searchUsers,
         clearUsers: clearUsers,
         getUser: getUser,

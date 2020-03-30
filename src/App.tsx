@@ -2,21 +2,15 @@ import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Users, { UserType } from './components/users/Users';
-import React, {
-  Component,
-  Fragment,
-  useState,
-  useEffect,
-  useContext
-} from 'react';
+import React, { Fragment, useEffect, useContext } from 'react';
 import Search from './components/users/Search';
 import Alert, { AlertType } from './components/layout/Alert';
 import { About } from './components/pages/About';
 import User from './components/users/User';
 import GithubState from './context/github/GithubState';
 import GithubContext from './context/github/githubContext';
-
-const API_BASE_URL = 'https://api.github.com';
+import AlertState from './context/alert/AlertState';
+import AlertContext from './context/alert/alertContext';
 
 interface AppState {
   users: any[];
@@ -28,9 +22,9 @@ interface AppState {
 
 const _App = () => {
   const githubContext = useContext(GithubContext);
+  const alertContext = useContext(AlertContext);
 
-  const [alert, setAlertState] = useState<AlertType>(null);
-
+  // Component Didmount
   useEffect(() => {
     githubContext.searchUsers('');
     return () => {
@@ -38,24 +32,31 @@ const _App = () => {
     };
   }, []);
 
-  const setAlert = (text: string, type: string, timeout_ms?: number) => {
-    setAlertState({ text: text, type: type });
-    setTimeout(() => setAlertState(null), timeout_ms ? timeout_ms : 8000);
-  };
+  // Component Did Update
+  useEffect(() => {
+    // warning user of API limit
+    if (githubContext.apiLog !== '') {
+      alertContext.setAlert(githubContext.apiLog, 'warning', 4000);
+      githubContext.clearApiLog();
+    }
+    return () => {
+      // cleanup
+    };
+  });
 
   return (
     <BrowserRouter>
       <div className='App'>
         <Navbar />
         <div className='container'>
-          <Alert alert={alert} />
+          <Alert />
           <Switch>
             <Route
               exact
               path='/'
               render={props => (
                 <Fragment>
-                  <Search setAlert={setAlert} />
+                  <Search />
                   <Users />
                 </Fragment>
               )}
@@ -77,7 +78,9 @@ const _App = () => {
 const WithContext = (FuncComp: () => JSX.Element) => {
   return () => (
     <GithubState>
-      <FuncComp />
+      <AlertState>
+        <FuncComp />
+      </AlertState>
     </GithubState>
   );
 };

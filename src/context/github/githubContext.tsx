@@ -6,8 +6,10 @@ export interface GithubContextState {
   user: UserType | null;
   repos: string[];
   loading: boolean;
+  apiLog: string;
 }
 export interface GithubContextMethod {
+  clearApiLog: () => void;
   searchUsers: (login: string) => void;
   clearUsers: () => void;
   getUser: (login: string) => Promise<void>;
@@ -18,9 +20,13 @@ export const InitGithubContextState: Readonly<GithubContextState> = {
   userList: [],
   user: null,
   repos: [],
-  loading: false
+  loading: false,
+  apiLog: ''
 };
 export const InitGithubContextMethod: Readonly<GithubContextMethod> = {
+  clearApiLog: () => {
+    console.error('Context Not Set');
+  },
   searchUsers: (login: string) => {
     console.error('Context Not Set');
   },
