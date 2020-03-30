@@ -26,9 +26,11 @@ export const InitGithubContextMethod: Readonly<GithubContextMethod> = {
   },
   clearUsers: () => {},
   getUser: (login: string) => {
+    console.error('Context Not Set');
     return Promise.resolve();
   },
   getUserRepos: (login: string) => {
+    console.error('Context Not Set');
     return Promise.resolve();
   }
 };

@@ -61,15 +61,27 @@ const GithubState = (props: { children: React.ReactNode }) => {
     }
     return jsondata;
   };
-
   // Search Users
   const searchUsers = async (user: string) => {
-    const jsondata = await custFetch(`${API_BASE_URL}/search/users?q=${user}`);
-    // setUsersListState(jsondata.items);
-    dispatch({
-      type: eActionTypes.SEARCH_USER,
-      payload: jsondata.items
-    });
+    let jsondata = [];
+
+    if (user === '') {
+      // Default Search
+      jsondata = await custFetch(`${API_BASE_URL}/users`);
+      dispatch({
+        type: eActionTypes.SEARCH_USER,
+        payload: jsondata
+      });
+    } else {
+      // Queried Search
+      const jsondata = await custFetch(
+        `${API_BASE_URL}/search/users?q=${user}`
+      );
+      dispatch({
+        type: eActionTypes.SEARCH_USER,
+        payload: jsondata.items
+      });
+    }
   };
   // Get User
   const getUser = async (login: string) => {
