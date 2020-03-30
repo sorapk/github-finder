@@ -1,24 +1,19 @@
-import React, { Component, Fragment, useEffect } from 'react';
+import React, { Component, Fragment, useEffect, useContext } from 'react';
 import { UserType } from './Users';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { Spinner } from '../layout/Spinner';
 import Repos from '../repos/Repos';
+import GithubContext from '../../context/github/githubContext';
 
-interface UserProp extends RouteComponentProps<{ login: string }> {
-  getUser: (login: string) => void;
-  user: UserType | null;
-  loading: boolean;
-  getUserRepos: (login: string) => void;
-  repos: any[];
-}
+const User = (props: RouteComponentProps<{ login: string }>) => {
+  const githubContext = useContext(GithubContext);
 
-const User = (props: UserProp) => {
   useEffect(
     //run when Component did mount
     () => {
       console.log('effecting');
-      props.getUser(props.match.params.login);
-      props.getUserRepos(props.match.params.login);
+      githubContext.getUser(props.match.params.login);
+      githubContext.getUserRepos(props.match.params.login);
       // eslint-disable-next-line
 
       return () => {
@@ -30,7 +25,7 @@ const User = (props: UserProp) => {
     ]
   );
 
-  const { user, loading, repos } = props;
+  const { user, loading, repos } = githubContext;
 
   if (user !== null) {
     const {

@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import UserItem from './UserItem';
 import { Spinner } from '../layout/Spinner';
+import GithubContext from '../../context/github/githubContext';
 
 export interface UserType {
   login: string;
@@ -35,13 +36,17 @@ export interface UserType {
   company: string;
   name: string;
 }
-const Users = ({ loading, users }: { loading: boolean; users: UserType[] }) => {
+const Users = () => {
+  const githubContext = useContext(GithubContext);
+
+  const { loading, userList } = githubContext;
+
   if (loading) {
     return <Spinner />;
   } else {
     return (
       <div style={userStyle}>
-        {users.map(user => (
+        {userList.map(user => (
           <UserItem key={user.id} user={user} />
         ))}
       </div>
