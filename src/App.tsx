@@ -1,8 +1,8 @@
 import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
-import Users from './components/users/Users';
-import React, { Component, Fragment } from 'react';
+import Users, { UserType } from './components/users/Users';
+import React, { Component, Fragment, useState, useEffect } from 'react';
 import Search from './components/users/Search';
 import Alert, { AlertType } from './components/layout/Alert';
 import { About } from './components/pages/About';
@@ -18,16 +18,24 @@ interface AppState {
   repos: any[];
 }
 
-export default class App extends Component<any, AppState> {
-  state = {
-    users: [],
-    loading: false,
-    alert: null,
-    user: null,
-    repos: []
-  };
-  fetch = async (url: string) => {
-    this.setState({ loading: true });
+const App = () => {
+  const [userList, setUsersListState] = useState<UserType[]>([]);
+  const [user, setUserState] = useState<UserType | null>(null);
+  const [repos, setReposState] = useState<string[]>([]);
+  const [alert, setAlertState] = useState<AlertType>(null);
+  const [loading, setLoadingState] = useState<boolean>(false);
+
+  useEffect(() => {
+    custFetch(`${API_BASE_URL}/users`).then(jsondata => {
+      setUsersListState(typeof jsondata === typeof [] ? jsondata : []);
+    });
+    return () => {
+      // cleanup
+    };
+  }, []);
+
+  const custFetch = async (url: string) => {
+    setLoadingState(true);
     const header = new Headers();
     header.append('Accept', 'application/json');
     header.set(
@@ -57,94 +65,86 @@ export default class App extends Component<any, AppState> {
 
       response.headers.forEach((val, key) => console.log(val, key));
 
-      this.setAlert(
+      setAlert(
         `Request Limit: ${xrem} (${xlimit}) ....  Reset Time: ${resetDate}`,
         'warning',
         3000
       );
 
       if ('message' in jsondata) {
-        this.setAlert(jsondata.message, 'warning');
+        setAlert(jsondata.message, 'warning');
       }
     } catch (e) {
       throw new Error('Bad Fetch');
     } finally {
-      this.setState({ loading: false });
+      setLoadingState(false);
     }
     return jsondata;
   };
-  searchUser = async (user: string) => {
-    const jsondata = await this.fetch(`${API_BASE_URL}/search/users?q=${user}`);
-    this.setState({ users: jsondata.items });
+  const searchUsers = async (user: string) => {
+    const jsondata = await custFetch(`${API_BASE_URL}/search/users?q=${user}`);
+    setUsersListState(jsondata.items);
   };
-  getUser = async (login: string) => {
-    const jsondata = await this.fetch(`${API_BASE_URL}/users/${login}`);
-    this.setState({ user: jsondata });
+  const getUser = async (login: string) => {
+    const jsondata = await custFetch(`${API_BASE_URL}/users/${login}`);
+    setUserState(jsondata);
   };
-  getUserRepos = async (login: string) => {
-    const jsondata = await this.fetch(
+  const getUserRepos = async (login: string) => {
+    const jsondata = await custFetch(
       `${API_BASE_URL}/users/${login}/repos?per_page=5&sort=created:asc`
     );
-    this.setState({ repos: jsondata });
+    setReposState(jsondata);
   };
-  clearUsers = () => {
-    this.setState({ users: [] });
+  const clearUsers = () => {
+    setUsersListState([]);
   };
-  setAlert = (text: string, type: string, timeout_ms?: number) => {
-    this.setState({ alert: { text: text, type: type } });
-    setTimeout(
-      () => this.setState({ alert: null }),
-      timeout_ms ? timeout_ms : 8000
-    );
+  const setAlert = (text: string, type: string, timeout_ms?: number) => {
+    setAlertState({ text: text, type: type });
+    setTimeout(() => setAlertState(null), timeout_ms ? timeout_ms : 8000);
   };
-  async componentDidMount() {
-    const jsondata = await this.fetch(`${API_BASE_URL}/users`);
-    this.setState({ users: typeof jsondata === typeof [] ? jsondata : [] });
-  }
-  render() {
-    const { users, loading, user, repos } = this.state;
-    return (
-      <BrowserRouter>
-        <div className='App'>
-          <Navbar />
-          <div className='container'>
-            <Alert alert={this.state.alert} />
-            <Switch>
-              <Route
-                exact
-                path='/'
-                render={props => (
-                  <Fragment>
-                    <Search
-                      searchUser={this.searchUser}
-                      clearUsers={this.clearUsers}
-                      showClear={users.length > 0}
-                      setAlert={this.setAlert}
-                    />
-                    <Users loading={loading} users={users} />
-                  </Fragment>
-                )}
-              />
-              >
-              <Route exact path='/about' component={About} />
-              <Route
-                exact
-                path='/user/:login'
-                render={props => (
-                  <User
-                    {...props}
-                    getUser={this.getUser}
-                    getUserRepos={this.getUserRepos}
-                    user={user}
-                    repos={repos}
-                    loading={loading}
+
+  return (
+    <BrowserRouter>
+      <div className='App'>
+        <Navbar />
+        <div className='container'>
+          <Alert alert={alert} />
+          <Switch>
+            <Route
+              exact
+              path='/'
+              render={props => (
+                <Fragment>
+                  <Search
+                    searchUser={searchUsers}
+                    clearUsers={clearUsers}
+                    showClear={userList.length > 0}
+                    setAlert={setAlert}
                   />
-                )}
-              />
-            </Switch>
-          </div>
+                  <Users loading={loading} users={userList} />
+                </Fragment>
+              )}
+            />
+            >
+            <Route exact path='/about' component={About} />
+            <Route
+              exact
+              path='/user/:login'
+              render={props => (
+                <User
+                  {...props}
+                  getUser={getUser}
+                  getUserRepos={getUserRepos}
+                  user={user}
+                  repos={repos}
+                  loading={loading}
+                />
+              )}
+            />
+          </Switch>
         </div>
-      </BrowserRouter>
-    );
-  }
-}
+      </div>
+    </BrowserRouter>
+  );
+};
+export default App;
