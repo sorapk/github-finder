@@ -8,16 +8,8 @@ import githubReducer, { GithubReducerAction } from './githubReducer';
 
 const API_BASE_URL = 'https://api.github.com';
 
-let githubClientId: string | undefined;
-let githubClientSecret: string | undefined;
-
-if (process.env.NODE_ENV !== 'production') {
-  githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
-  githubClientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
-} else {
-  githubClientId = process.env.GITHUB_CLIENT_ID;
-  githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
-}
+const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
+const githubClientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
 
 const GithubState = (props: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer<
