@@ -15,7 +15,7 @@ const GithubState = (props: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer<
     Reducer<GithubContextState, GithubReducerAction>
   >(githubReducer, InitGithubContextState);
-  console.log('github state update', state);
+  // console.log('github state update', state);
 
   // Data Fetcher
   const custFetch = async (url: string) => {
@@ -42,7 +42,7 @@ const GithubState = (props: { children: React.ReactNode }) => {
         restepocStr !== null ? parseInt(restepocStr) : 0;
       const resetDate = new Date(restepocNum * 1000).toLocaleTimeString();
 
-      response.headers.forEach((val, key) => console.log(val, key));
+      // response.headers.forEach((val, key) => console.log(val, key));
 
       setAPILog(
         `Request Limit: ${xrem} (${xlimit}) ....  Reset Time: ${resetDate}`

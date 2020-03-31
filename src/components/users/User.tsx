@@ -10,7 +10,7 @@ const User = (props: RouteComponentProps<{ login: string }>) => {
   useEffect(
     //run when Component did mount
     () => {
-      console.log('effecting');
+      // console.log('effecting');
       githubContext.getUser(props.match.params.login);
       githubContext.getUserRepos(props.match.params.login);
 

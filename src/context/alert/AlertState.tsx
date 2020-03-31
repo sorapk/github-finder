@@ -11,7 +11,7 @@ const AlertState = (props: { children: React.ReactNode }) => {
     alertReducer,
     InitAlertState
   );
-  console.log('alert state update', state);
+  // console.log('alert state update', state);
   const setAlert = (text: string, type: string, timeout_ms?: number) => {
     dispatch({
       type: eAlertActionTypes.SET_ALERT,
