@@ -15,8 +15,8 @@ Interfaces with Github API and performs user lookup on Github.
 ## Implementation Highlights
 
 - Implemented presentational components functionally.
-- Manage scope and access of each components' using React Hook Context API.
-- Abstract state updates and edits with Redux reducer pattern using React Hook Context API.
+- Manage scope and access of each components' using React Hook useContext API.
+- Abstract state updates and edits with Redux reducer pattern using React useReducer API.
 
 ## Environment Setup
 
