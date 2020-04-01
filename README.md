@@ -6,11 +6,12 @@ Interfaces with Github API and performs user lookup on Github.
 
 ![Overlay](https://github.com/sorapk/github-finder/blob/master/other/high-level-component.PNG)
 
-## Key Libraries
+## Key Technologies
 
 - React
 - Type Script
 - React Hooks
+- Polyfill.io
 
 ## Implementation Highlights
 
